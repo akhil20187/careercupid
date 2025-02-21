@@ -1,0 +1,122 @@
+---
+description: Build APIs using FAST API python for Numerology based Job matching platform
+globs: 
+---
+# Cursor Rule: CareerCupid API & Numerojobs Architecture Guidelines
+
+This document provides a unified set of guidelines for developing a numerology-based job matching platform. It integrates FastAPI and Pydantic best practices for API development with the overall architectural vision for the Numerojobs platform.
+
+---
+
+## 1. Overview
+
+This rule consolidates two key areas:
+- **API Development Guidelines (CareerCupid API)**: Best practices for writing concise, modular, and performant FastAPI code.
+- **System Architecture (Numerojobs)**: High-level architectural decisions, including technology stack, component separation, security, and deployment strategies.
+- **LLM Option** : We will be using AISuite github repo , with model as Open AI , GPT-4o-mini which is the right model.
+
+The goal is to build a scalable, secure, and maintainable API that serves as the backbone of our job matching platform.
+
+---
+
+## 2. API Development Guidelines
+
+### Core Principles
+- **Conciseness & Clarity:**
+  - Write concise, technical responses with accurate Python examples.
+  - Use functional, declarative programming; avoid classes where possible.
+  - Prefer iteration and modularization over code duplication.
+- **Naming Conventions & Structure:**
+  - Use descriptive variable names with auxiliary verbs (e.g., `is_active`, `has_permission`).
+  - Use lowercase with underscores for directories and files (e.g., `routers/user_routes.py`).
+  - Favor named exports for routes and utility functions.
+  - Adopt the Receive an Object, Return an Object (RORO) pattern.
+
+### Python & FastAPI Best Practices
+- **Function Definitions:**
+  - Use `def` for pure functions and `async def` for asynchronous operations.
+  - Apply type hints for all function signatures.
+  - Prefer Pydantic models over raw dictionaries for input validation.
+- **Project Structure:**
+  - Organize the code into exported routers, sub-routes, utilities, static content, and types (models, schemas).
+- **Conditional Statements:**
+  - Avoid unnecessary curly braces in conditionals.
+  - For single-line conditionals, omit curly braces (e.g., `if condition: do_something()`).
+
+### Error Handling & Validation
+- Address errors and edge cases at the start of the function using guard clauses.
+- Use early returns to simplify deeply-nested conditionals.
+- Log errors and provide user-friendly error messages.
+- Use HTTPException for expected API errors and implement custom error types for consistency.
+
+### Performance Optimization
+- Minimize blocking I/O operations and use asynchronous functions for I/O-bound tasks.
+- Implement caching strategies (e.g., Redis, in-memory caching).
+- Optimize data serialization/deserialization with Pydantic and use lazy loading techniques for large datasets.
+
+### Dependencies & Middleware
+- **Core Dependencies:**
+  - FastAPI, Pydantic v2, an async database library (e.g., asyncpg or aiomysql), SQLAlchemy 2.0 if ORM features are necessary.
+- **Middleware & Operational Excellence:**
+  - Use middleware for logging, error monitoring, and performance optimization.
+  - Minimize the use of startup/shutdown events in favor of lifespan context managers.
+
+---
+
+## 3. Architectural Guidelines for the Numerojobs Platform
+
+### System Overview
+- **Backend API:**
+  - Built with FastAPI to manage authentication, business logic (numerology calculations, resume parsing, compatibility algorithms), and external integrations.
+  - Issues JWT tokens post-authentication and handles both traditional and social login endpoints.
+- **Frontend Application:**
+  - Developed with NextJS to render a dynamic, responsive UI.
+  - Communicates with the backend via secure RESTful endpoints.
+
+### Technology Stack
+- **Backend & Database:**
+  - FastAPI for the server-side application.
+  - Supabase services for authentication using JWT and PostgreSQL as the primary database.
+  - Supabase Storage for secure handling of file uploads.
+- **Data Processing:**
+  - Use Python libraries for numerology analysis, AI recommendations, and resume parsing.
+  - Offload intensive tasks to asynchronous queues (e.g., Celery with RabbitMQ/Redis) or leverage Supabase Edge Functions in early stages.
+- **Frontend:**
+  - NextJS with SSR and SSG for SEO and performance.
+  - Use SWR or React Query for efficient data fetching.
+  
+### Architectural Components
+- **Authentication & Authorization:**
+  - End-to-end JWT token issuance and validation.
+  - Support for social logins (e.g., LinkedIn, Google) via integrated endpoints.
+- **Business Logic Layer:**
+  - Management of user profiles, resume parsing, numerology computations, and job matching.
+- **Integration Layer:**
+  - Interfaces with external services like payment gateways, SMS/Email providers, and cloud storage services.
+- **Asynchronous Operations:**
+  - Employ asynchronous processing for resume parsing and numerology tasks to keep the API responsive.
+  
+### Deployment & Infrastructure
+- **Containerization & Orchestration:**
+  - Use Docker for packaging and Kubernetes for deploying and scaling container clusters.
+- **CI/CD Pipelines:**
+  - Set up continuous integration and deployment processes to streamline updates.
+- **Monitoring & Logging:**
+  - Integrate monitoring (e.g., Prometheus/Grafana) and logging solutions (e.g., ELK stack) alongside Supabase's built-in tools.
+  
+### Security Best Practices
+- Use HTTPS for all communications.
+- Properly configure CORS and secure headers.
+- Implement API gateways (NGINX, Traefik) for load balancing, SSL termination, and rate limiting.
+- Encrypt sensitive data at rest and in transit.
+
+---
+
+## 4. Conclusion
+
+By integrating these coding and architectural guidelines, we ensure that the platform is:
+- Modular and maintainable.
+- Highly scalable and performant.
+- Secure, with a clear separation of concerns between the API and frontend layers.
+
+This consolidated cursor rule serves as a blueprint for both day-to-day development decisions and high-level architectural planning. 
