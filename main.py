@@ -14,7 +14,7 @@ app = FastAPI(
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8080"],  # List of allowed origins
+    allow_origins=["http://localhost:8080","https://b1dccbd9-a1e0-4209-a9e7-3a02bd3ecbfd-00-zndd6ff1gup.pike.replit.dev","career-cupid.replit.app"],  # List of allowed origins
     allow_credentials=True,
     allow_methods=["*"],  # Allows all methods
     allow_headers=["*"],  # Allows all headers
