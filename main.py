@@ -1,8 +1,9 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from numerology_calculator import NumerologyCalculator
 from typing import Optional
-from app.routers import resume_management
+from app.routers import resume_management, report_generation
 
 app = FastAPI(
     title="CareerCupid Numerology API",
@@ -10,8 +11,18 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Include resume management router
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:8080"],  # List of allowed origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
+
+# Include routers
 app.include_router(resume_management.router)
+app.include_router(report_generation.router)
 
 class NameRequest(BaseModel):
     full_name: str
